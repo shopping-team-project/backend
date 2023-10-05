@@ -11,6 +11,8 @@ import com.example.shopping.repository.member.MemberRepository;
 import com.example.shopping.service.s3.S3ItemImgUploaderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -217,6 +219,15 @@ public class ItemService {
             return "해당 유저의 게시글이 아닙니다.";
         }
         return "상품과 이미지를 삭제했습니다.";
+    }
+
+    // 전체 상품 보여주기
+    @Transactional(readOnly = true)
+    public Page<ItemDTO> getItems(Pageable pageable) {
+        Page<ItemEntity> allItem = itemRepository.findAll(pageable);
+        // 각 아이템 엔티티를 ItemDTO로 변환합니다.
+        // 이 변환은 ItemDTO::toItemDTO 메서드를 사용하여 수행됩니다.
+        return allItem.map(ItemDTO::toItemDTO);
     }
 
 }

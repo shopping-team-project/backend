@@ -1,16 +1,20 @@
 package com.example.shopping.service.member;
 
 import com.example.shopping.config.jwt.JwtProvider;
+import com.example.shopping.domain.Item.ItemDTO;
 import com.example.shopping.domain.jwt.TokenDTO;
 import com.example.shopping.domain.member.MemberDTO;
 import com.example.shopping.domain.member.Role;
 import com.example.shopping.entity.jwt.TokenEntity;
 import com.example.shopping.entity.member.AddressEntity;
 import com.example.shopping.entity.member.MemberEntity;
+import com.example.shopping.repository.item.ItemRepository;
 import com.example.shopping.repository.jwt.TokenRepository;
 import com.example.shopping.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -184,6 +188,7 @@ public class MemberService {
             return "이미 가입한 이메일이 있습니다.";
         }
     }
+
 
 
 }
