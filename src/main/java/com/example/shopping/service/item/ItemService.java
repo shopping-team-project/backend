@@ -190,4 +190,33 @@ public class ItemService {
         }
     }
 
+    // 상품 삭제
+    public String removeItem(Long itemId, String memberEmail) {
+        // 상품 조회
+        ItemEntity findItem = itemRepository.findById(itemId)
+                .orElseThrow(EntityNotFoundException::new);
+        // 이미지 조회
+        List<ItemImgEntity> findImg = itemImgRepository.findByItemItemId(itemId);
+        // 회원 조회
+        MemberEntity findUser = memberRepository.findByEmail(memberEmail);
+
+        if(findUser.getEmail().equals(findItem.getMember().getEmail())) {
+            for(ItemImgEntity img : findImg) {
+                String uploadFilePath = img.getUploadImgPath();
+                String uuidFileName = img.getUploadImgName();
+
+                // 상품 정보 삭제
+                itemRepository.deleteByItemId(itemId);
+                // DB에서 이미지 삭제
+                itemImgRepository.deleteById(img.getItemImgId());
+                // S3에서 삭제
+                String result = s3ItemImgUploaderService.deleteFile(uploadFilePath, uuidFileName);
+                log.info(result);
+            }
+        }else  {
+            return "해당 유저의 게시글이 아닙니다.";
+        }
+        return "상품과 이미지를 삭제했습니다.";
+    }
+
 }

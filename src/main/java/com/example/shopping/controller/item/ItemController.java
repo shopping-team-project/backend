@@ -75,4 +75,19 @@ public class ItemController {
         }
     }
 
+    // 상품 삭제
+    @DeleteMapping("/{itemId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<?> deleteItem(@PathVariable Long itemId,
+                                        @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String email = userDetails.getUsername();
+            log.info("email : " + email);
+            String result = itemService.removeItem(itemId, email);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+        }
+    }
+
 }
