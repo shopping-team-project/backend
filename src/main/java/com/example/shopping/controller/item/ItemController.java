@@ -58,4 +58,21 @@ public class ItemController {
         }
     }
 
+    // 상품 수정
+    @PutMapping("/{itemId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<?> updateItem(@PathVariable Long itemId,
+                                        @RequestBody ItemDTO itemDTO,
+                                        @RequestPart(value = "files") List<MultipartFile> itemFiles,
+                                        @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String email = userDetails.getUsername();
+            log.info("email : " + email);
+            ResponseEntity<?> responseEntity = itemService.updateItem(itemId, itemDTO, itemFiles, email);
+            return ResponseEntity.ok().body(responseEntity);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
