@@ -35,19 +35,23 @@ dependencies {
     // validation(유효성 검사)
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
+    // 서버를 재실행 안해줘도 바로 처리가능하게 만드는 라이브러리
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    // h2
-    runtimeOnly 'com.h2database:h2'
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // 룸북
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    // AWS S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {

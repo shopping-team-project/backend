@@ -48,6 +48,9 @@ public class MemberDTO {
     @Schema(description = "소셜 로그인 식별 아이디")
     private String providerId;
 
+    @Schema(description = "포인트")
+    private String memberPoint;
+
     @Builder
     public MemberDTO(Long memberId,
                      String email,
@@ -57,7 +60,8 @@ public class MemberDTO {
                      Role memberRole,
                      AddressDTO memberAddress,
                      String provider,
-                     String providerId) {
+                     String providerId,
+                     String memberPoint) {
         this.memberId = memberId;
         this.email = email;
         this.memberName = memberName;
@@ -67,6 +71,7 @@ public class MemberDTO {
         this.memberAddress = memberAddress;
         this.provider = provider;
         this.providerId = providerId;
+        this.memberPoint = memberPoint;
     }
 
     public static MemberDTO toMemberDTO(MemberEntity member) {
@@ -77,6 +82,7 @@ public class MemberDTO {
                 .nickName(member.getNickName())
                 .memberName(member.getMemberName())
                 .memberRole(member.getMemberRole())
+                .memberPoint(member.getMemberPoint())
                 .memberAddress(AddressDTO.builder()
                         .memberAddr(member.getAddress().getMemberAddr())
                         .memberAddrDetail(member.getAddress().getMemberAddrDetail())

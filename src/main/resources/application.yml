@@ -3,6 +3,8 @@ spring:
     include:
       - jwt
       - oauth
+      - s3
+  active: s3
   devtools:
     livereload:
       enabled: true
@@ -40,8 +42,4 @@ spring:
 
 logging:
   level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
+    org.hibernate.SQL: debug
