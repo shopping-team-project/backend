@@ -14,7 +14,7 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 public class MemberEntity extends BaseTimeEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
@@ -27,7 +27,7 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "member_pw")
     private String memberPw;
 
-    @Column(name = "nick_name")
+    @Column(name = "nick_name", unique = true)
     private String nickName;
 
     @Enumerated(EnumType.STRING)

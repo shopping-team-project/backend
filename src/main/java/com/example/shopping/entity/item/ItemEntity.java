@@ -18,7 +18,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 public class ItemEntity extends BaseTimeEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long itemId;
 
@@ -51,6 +51,7 @@ public class ItemEntity extends BaseTimeEntity {
     // 보통 상품을 삭제하면 이미지도 같이 삭제되기 때문에 이렇게 했다.
     @Column(name = "item_img")
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OrderBy("itemImgId asc")
     // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
     private List<ItemImgEntity> itemImgList = new ArrayList<>();
 

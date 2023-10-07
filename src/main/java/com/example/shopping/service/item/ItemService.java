@@ -230,4 +230,12 @@ public class ItemService {
         return allItem.map(ItemDTO::toItemDTO);
     }
 
+    // 검색
+    @Transactional(readOnly = true)
+    public Page<ItemDTO> getSearchItems(Pageable pageable,
+                                        String searchKeyword) {
+        Page<ItemEntity> searchItems = itemRepository.findByItemNameContaining(pageable, searchKeyword);
+        return searchItems.map(ItemDTO::toItemDTO);
+    }
+
 }

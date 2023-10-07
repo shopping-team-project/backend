@@ -12,4 +12,6 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
 
     // 페이지 처리를 위해서
     Page<ItemEntity> findAll(Pageable pageable);
+    // 검색
+    Page<ItemEntity> findByItemNameContaining(Pageable pageable, String searchKeyword);
 }

@@ -108,6 +108,8 @@ public class ItemController {
     }
 
     // 전체 상품 보여주기
+    // 파라미터로 받는다.
+    // 예) localhost:8080/api/v1/items?page=1&searchKeyword=내용
     @GetMapping("")
     @Tag(name = "item")
     @Operation(summary = "상품 전체", description = "모든 상품을 보여주는 API입니다.")
@@ -115,29 +117,57 @@ public class ItemController {
             // SecuritConfig에 Page 설정을 한 페이지에 10개 보여주도록
             // 설정을 해서 여기서는 할 필요가 없다.
             @PageableDefault(sort = "itemId", direction = Sort.Direction.DESC)
-            Pageable pageable) {
-        Page<ItemDTO> items = itemService.getItems(pageable);
+            Pageable pageable,
+            String searchKeyword) {
+        try {
+            // 검색하지 않을 때는 모든 글을 보여준다.
+            if(searchKeyword == null) {
+                Page<ItemDTO> items = itemService.getItems(pageable);
+                Map<String, Object> response = new HashMap<>();
+                // 현재 페이지의 아이템 목록
+                response.put("items", items.getContent());
+                // 현재 페이지 번호
+                response.put("nowPageNumber", items.getNumber());
+                // 전체 페이지 수
+                response.put("totalPage", items.getTotalPages());
+                // 한 페이지에 출력되는 데이터 개수
+                response.put("pageSize", items.getSize());
+                // 다음 페이지 존재 여부
+                response.put("hasNextPage", items.hasNext());
+                // 이전 페이지 존재 여부
+                response.put("hasPreviousPage", items.hasPrevious());
+                // 첫 번째 페이지 여부
+                response.put("isFirstPage", items.isFirst());
+                // 마지막 페이지 여부
+                response.put("isLastPage", items.isLast());
 
-        Map<String, Object> response = new HashMap<>();
+                return ResponseEntity.ok().body(response);
+            } else {
+                // 검색할 때는 검색한 것을 보여줌
+                Page<ItemDTO> searchItems = itemService.getSearchItems(pageable, searchKeyword);
+                Map<String, Object> response = new HashMap<>();
+                // 현재 페이지의 아이템 목록
+                response.put("items", searchItems.getContent());
+                // 현재 페이지 번호
+                response.put("nowPageNumber", searchItems.getNumber());
+                // 전체 페이지 수
+                response.put("totalPage", searchItems.getTotalPages());
+                // 한 페이지에 출력되는 데이터 개수
+                response.put("pageSize", searchItems.getSize());
+                // 다음 페이지 존재 여부
+                response.put("hasNextPage", searchItems.hasNext());
+                // 이전 페이지 존재 여부
+                response.put("hasPreviousPage", searchItems.hasPrevious());
+                // 첫 번째 페이지 여부
+                response.put("isFirstPage", searchItems.isFirst());
+                // 마지막 페이지 여부
+                response.put("isLastPage", searchItems.isLast());
 
-        // 현재 페이지의 아이템 목록
-        response.put("items", items.getContent());
-        // 현재 페이지 번호
-        response.put("nowPageNumber", items.getNumber());
-        // 전체 페이지 수
-        response.put("totalPage", items.getTotalPages());
-        // 한 페이지에 출력되는 데이터 개수
-        response.put("pageSize", items.getSize());
-        // 다음 페이지 존재 여부
-        response.put("hasNextPage", items.hasNext());
-        // 이전 페이지 존재 여부
-        response.put("hasPreviousPage", items.hasPrevious());
-        // 첫 번째 페이지 여부
-        response.put("isFirstPage", items.isFirst());
-        // 마지막 페이지 여부
-        response.put("isLastPage", items.isLast());
-
-        return ResponseEntity.ok().body(response);
+                return ResponseEntity.ok().body(response);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

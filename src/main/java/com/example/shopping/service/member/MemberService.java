@@ -162,6 +162,7 @@ public class MemberService {
                         .memberPw(passwordEncoder.encode(memberDTO.getMemberPw()))
                         .nickName(memberDTO.getNickName())
                         .memberRole(memberDTO.getMemberRole())
+                        .memberPoint(findUser.getMemberPoint())
                         .address(AddressEntity.builder()
                                 .memberAddr(memberDTO.getMemberAddress().getMemberAddr())
                                 .memberAddrDetail(memberDTO.getMemberAddress().getMemberAddrDetail())
