@@ -39,9 +39,6 @@ public class ItemDTO {
     @Schema(description = "상품 등록 시간")
     private LocalDateTime regTime;
 
-    @Schema(description = "상품 업데이트 시간")
-    private LocalDateTime updateTime;
-
     @Schema(description = "회원 닉네임")
     @NotNull(message = "닉네임은 필수로 입력해야합니다.")
     private String memberNickName;
@@ -65,7 +62,6 @@ public class ItemDTO {
                    String itemDetail,
                    ItemSellStatus itemSellStatus,
                    LocalDateTime regTime,
-                   LocalDateTime updateTime,
                    String memberNickName,
                    int stockNumber,
                    String sellPlace,
@@ -76,7 +72,6 @@ public class ItemDTO {
         this.itemDetail = itemDetail;
         this.itemSellStatus = itemSellStatus;
         this.regTime = regTime;
-        this.updateTime = updateTime;
         this.memberNickName = memberNickName;
         this.stockNumber = stockNumber;
         this.sellPlace = sellPlace;
@@ -97,8 +92,7 @@ public class ItemDTO {
                 .price(item.getPrice())
                 .itemDetail(item.getItemDetail())
                 .itemSellStatus(item.getItemSellStatus())
-                .regTime(item.getRegTime())
-                .updateTime(item.getUpdateTime())
+                .regTime(LocalDateTime.now())
                 .memberNickName(item.getMember().getNickName())
                 .sellPlace(item.getItemPlace())
                 .stockNumber(item.getStockNumber())

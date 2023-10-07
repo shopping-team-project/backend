@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
     ItemEntity deleteByItemId(Long itemId);
+
     // 페이지 처리를 위해서
     Page<ItemEntity> findAll(Pageable pageable);
 }
