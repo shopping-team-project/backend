@@ -1,9 +1,11 @@
 package com.example.shopping.controller.member;
 
 import com.example.shopping.domain.jwt.TokenDTO;
+import com.example.shopping.domain.member.LoginDTO;
 import com.example.shopping.domain.member.MemberDTO;
-import com.example.shopping.service.jwt.TokenService;
-import com.example.shopping.service.member.MemberService;
+import com.example.shopping.domain.member.ModifyDTO;
+import com.example.shopping.service.jwt.TokenServiceImpl;
+import com.example.shopping.service.member.MemberServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +29,8 @@ import javax.persistence.EntityNotFoundException;
 @Tag(name = "member", description = "유저 API")
 public class MemberController {
 
-    private final MemberService memberService;
-    private final TokenService tokenService;
+    private final MemberServiceImpl memberServiceImpl;
+    private final TokenServiceImpl tokenServiceImpl;
 
 
     // 회원가입
@@ -45,7 +47,7 @@ public class MemberController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getClass().getSimpleName());
             }
 
-            ResponseEntity<?> signUp = memberService.signUp(member);
+            ResponseEntity<?> signUp = memberServiceImpl.signUp(member);
             return ResponseEntity.ok().body(signUp);
         } catch (Exception e) {
             log.error("예외 : " + e.getMessage());
@@ -59,7 +61,7 @@ public class MemberController {
     @Operation(summary = "회원 조회", description = "회원을 검색하는 API입니다.")
     public ResponseEntity<MemberDTO> search(@PathVariable Long memberId) {
         try {
-            MemberDTO search = memberService.search(memberId);
+            MemberDTO search = memberServiceImpl.search(memberId);
             return ResponseEntity.ok().body(search);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -72,7 +74,7 @@ public class MemberController {
     @Operation(summary = "삭제 API", description = "유저를 삭제하는 API입니다.")
     public String remove(@PathVariable Long memberId) {
         try {
-            String remove = memberService.removeUser(memberId);
+            String remove = memberServiceImpl.removeUser(memberId);
             return remove;
         } catch (Exception e) {
             return "회원탈퇴 실패했습니다.";
@@ -83,11 +85,11 @@ public class MemberController {
     @PostMapping("")
     @Tag(name = "member")
     @Operation(summary = "로그인 API", description = "로그인을 하면 JWT를 반환해줍니다.")
-    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         try {
-            String email = memberDTO.getEmail();
-            String password = memberDTO.getMemberPw();
-            ResponseEntity<?> login = memberService.login(email, password);
+            String email = loginDTO.getMemberEmail();
+            String password = loginDTO.getMemberPw();
+            ResponseEntity<?> login = memberServiceImpl.login(email, password);
             return ResponseEntity.ok().body(login);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인을 실패했습니다.");
@@ -98,12 +100,12 @@ public class MemberController {
     @PutMapping("")
     @Tag(name = "member")
     @Operation(summary = "수정 API", description = "유저 정보를 수정하는 API입니다.")
-    public ResponseEntity<?> update(@RequestBody MemberDTO memberDTO,
+    public ResponseEntity<?> update(@RequestBody ModifyDTO modifyDTO,
                                     @AuthenticationPrincipal UserDetails userDetails) {
         try {
             String email = userDetails.getUsername();
             log.info("email : " + email);
-            ResponseEntity<?> responseEntity = memberService.updateUser(memberDTO, email);
+            ResponseEntity<?> responseEntity = memberServiceImpl.updateUser(modifyDTO, email);
             return ResponseEntity.ok().body(responseEntity);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("잘못된 요청");
@@ -116,7 +118,7 @@ public class MemberController {
     @Operation(summary = "중복체크 API", description = "userEmail이 중복인지 체크하는 API입니다.")
     public String emailCheck(@PathVariable String memberEmail) {
         log.info("email : " + memberEmail);
-        String result = memberService.emailCheck(memberEmail);
+        String result = memberServiceImpl.emailCheck(memberEmail);
         return result;
     }
 
@@ -127,7 +129,7 @@ public class MemberController {
     public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String token) throws Exception {
         try {
             if(token != null) {
-                ResponseEntity<TokenDTO> accessToken = tokenService.createAccessToken(token);
+                ResponseEntity<TokenDTO> accessToken = tokenServiceImpl.createAccessToken(token);
                 return ResponseEntity.ok().body(accessToken);
             } else {
                 return ResponseEntity.notFound().build();

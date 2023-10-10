@@ -1,7 +1,7 @@
 package com.example.shopping.controller.item;
 
 import com.example.shopping.domain.Item.ItemDTO;
-import com.example.shopping.service.item.ItemService;
+import com.example.shopping.service.item.ItemServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/items")
 @Tag(name = "item", description = "상품 API")
 public class ItemController {
-    private final ItemService itemService;
+    private final ItemServiceImpl itemServiceImpl;
 
     // 상품 등록
     @PostMapping("")
@@ -49,7 +49,7 @@ public class ItemController {
             }
 
             String email = userDetails.getUsername();
-            ResponseEntity<?> responseEntity = itemService.saveItem(itemDTO, itemFiles, email);
+            ResponseEntity<?> responseEntity = itemServiceImpl.saveItem(itemDTO, itemFiles, email);
             return ResponseEntity.ok().body(responseEntity);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -62,7 +62,7 @@ public class ItemController {
     @Operation(summary = "상품 상세 정보 보기", description = "상품의 상세정보를 볼 수 있습니다.")
     public ResponseEntity<?> itemDetail(@PathVariable Long itemId) {
         try {
-            ResponseEntity<ItemDTO> item = itemService.getItem(itemId);
+            ResponseEntity<ItemDTO> item = itemServiceImpl.getItem(itemId);
             log.info("item : " + item);
             return ResponseEntity.ok().body(item);
         } catch (EntityNotFoundException e) {
@@ -83,7 +83,7 @@ public class ItemController {
         try {
             String email = userDetails.getUsername();
             log.info("email : " + email);
-            ResponseEntity<?> responseEntity = itemService.updateItem(itemId, itemDTO, itemFiles, email);
+            ResponseEntity<?> responseEntity = itemServiceImpl.updateItem(itemId, itemDTO, itemFiles, email);
             return ResponseEntity.ok().body(responseEntity);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -100,7 +100,7 @@ public class ItemController {
         try {
             String email = userDetails.getUsername();
             log.info("email : " + email);
-            String result = itemService.removeItem(itemId, email);
+            String result = itemServiceImpl.removeItem(itemId, email);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("잘못된 요청입니다.");
@@ -122,7 +122,7 @@ public class ItemController {
         try {
             // 검색하지 않을 때는 모든 글을 보여준다.
             if(searchKeyword == null) {
-                Page<ItemDTO> items = itemService.getItems(pageable);
+                Page<ItemDTO> items = itemServiceImpl.getItems(pageable);
                 Map<String, Object> response = new HashMap<>();
                 // 현재 페이지의 아이템 목록
                 response.put("items", items.getContent());
@@ -144,7 +144,7 @@ public class ItemController {
                 return ResponseEntity.ok().body(response);
             } else {
                 // 검색할 때는 검색한 것을 보여줌
-                Page<ItemDTO> searchItems = itemService.getSearchItems(pageable, searchKeyword);
+                Page<ItemDTO> searchItems = itemServiceImpl.getSearchItems(pageable, searchKeyword);
                 Map<String, Object> response = new HashMap<>();
                 // 현재 페이지의 아이템 목록
                 response.put("items", searchItems.getContent());
