@@ -51,6 +51,11 @@ public class ItemDTO {
     @NotNull(message = "판매지역을 입력해야 합니다.")
     private String sellPlace;
 
+
+    private String itemReserver;
+
+    private int itemRamount;
+
     @Schema(description = "상품 이미지")
     // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
     private List<ItemImgDTO> itemImgList = new ArrayList<>();
@@ -65,6 +70,8 @@ public class ItemDTO {
                    String memberNickName,
                    int stockNumber,
                    String sellPlace,
+                   String itemReserver,
+                   int itemRamount,
                    List<ItemImgDTO> itemImgList) {
         this.itemId = itemId;
         this.itemName = itemName;
@@ -75,6 +82,8 @@ public class ItemDTO {
         this.memberNickName = memberNickName;
         this.stockNumber = stockNumber;
         this.sellPlace = sellPlace;
+        this.itemReserver = itemReserver;
+        this.itemRamount =itemRamount;
         this.itemImgList = itemImgList;
     }
 
@@ -96,6 +105,8 @@ public class ItemDTO {
                 .memberNickName(item.getMember().getNickName())
                 .sellPlace(item.getItemPlace())
                 .stockNumber(item.getStockNumber())
+                .itemReserver(item.getItemReserver())
+                .itemRamount(item.getItemRamount())
                 .itemImgList(itemImgDTOList)
                 .build();
     }

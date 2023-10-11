@@ -22,7 +22,6 @@ public class OrderDTO {
     @Schema(description = "주문결제번호")
     private Long orderId;
 
-    @Schema(description = "주문결제일자")
     private LocalDateTime orderDate;
 
     @Schema(description = "주문결제자")
@@ -42,10 +41,20 @@ public class OrderDTO {
         this.orderItem = orderItem;
     }
 
+    public static OrderDTO createOrder(Long orderAdmin, Long orderMember, List<OrderItemDTO> orderItemList) {
+        return OrderDTO.builder()
+                .orderDate(LocalDateTime.now())
+                .orderAdmin(orderAdmin)
+                .orderMember(orderMember)
+                .orderItem(orderItemList)
+                .build();
+    }
+
     public OrderEntity toEntity(){
         return OrderEntity.builder()
-                .orderAdmin(this.orderAdmin)
                 .orderDate(this.orderDate)
+                .orderAdmin(this.orderAdmin)
+                .orderMember(this.orderMember)
                 .orderId(this.orderId)
                 .orderItem(this.orderItem.stream()
                         .map(OrderItemDTO::toEntity).collect(Collectors.toList()))

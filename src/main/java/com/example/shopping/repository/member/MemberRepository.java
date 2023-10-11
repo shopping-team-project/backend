@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     MemberEntity findByEmail(String email);
     void deleteByMemberId(Long memberId);
+    MemberEntity findByNickName(String nickName);
 }

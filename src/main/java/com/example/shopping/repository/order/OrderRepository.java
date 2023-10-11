@@ -7,7 +7,4 @@ public interface OrderRepository {
 
     OrderDTO save(OrderDTO order);
 
-    Optional<OrderDTO> findByOrderAdmin(String admin);
-
-    Optional<OrderDTO> findByOrderMember(String mbrId);
 }

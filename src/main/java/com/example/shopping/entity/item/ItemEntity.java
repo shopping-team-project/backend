@@ -39,11 +39,17 @@ public class ItemEntity extends BaseTimeEntity {
     private String itemDetail;  // 상품 상세 설명
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "item_sell_stauts")
+    @Column(name = "item_sell_status")
     private ItemSellStatus itemSellStatus;  // 상품 판매 상태
 
     @Column(name = "item_place")
     private String itemPlace;
+
+    @Column(name="item_reserver")
+    private String itemReserver;
+
+    @Column(name="item_ramount")
+    private int itemRamount;
 
     // 여기서 보면 cascade = CascadeType.ALL 이렇게 추가한 거는
     // 상품을 수정, 삭제하면 itemImg도 같이 영향을 가게 하기 위해서이다.
@@ -68,6 +74,8 @@ public class ItemEntity extends BaseTimeEntity {
                       ItemSellStatus itemSellStatus,
                       List<ItemImgEntity> itemImgList,
                       String itemPlace,
+                      String itemReserver,
+                      int itemRamount,
                       MemberEntity member) {
         this.itemId = itemId;
         this.itemName = itemName;
@@ -77,6 +85,20 @@ public class ItemEntity extends BaseTimeEntity {
         this.itemSellStatus = itemSellStatus;
         this.itemImgList = itemImgList;
         this.itemPlace = itemPlace;
+        this.itemRamount = itemRamount;
+        this.itemReserver = itemReserver;
         this.member = member;
+    }
+
+    public void itemSell(int cnt, ItemSellStatus status){
+        this.stockNumber -= cnt;
+
+        if(this.stockNumber == 0){
+            this.itemSellStatus = status;
+        }
+    }
+
+    public void changeStatus(ItemSellStatus status){
+        this.itemSellStatus = status;
     }
 }

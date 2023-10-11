@@ -17,4 +17,6 @@ public interface MemberService {
     ResponseEntity<?> updateUser(ModifyDTO modifyDTO, String memberEmail);
     // 이메일 체크
     String emailCheck(String email);
+    // 닉네임 체크
+    String nickNameCheck(String nickName);
 }

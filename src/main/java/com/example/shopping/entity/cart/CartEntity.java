@@ -23,27 +23,20 @@ public class CartEntity extends BaseTimeEntity {
     @Column(name="cart_id")
     private Long cartId;
 
-    @OneToMany(mappedBy="cart")
-    private List<CartItemEntity> cartItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private MemberEntity member;
 
     @Builder
-    public CartEntity(Long cartId, List<CartItemEntity> cartItem, MemberEntity member) {
+    public CartEntity(Long cartId, MemberEntity member) {
         this.cartId = cartId;
-        this.cartItem = cartItem;
         this.member = member;
     }
 
     public CartDTO toDTO(){
         return CartDTO.builder()
                 .cartId(this.cartId)
-                .cartItem(this.cartItem.stream()
-                        .map(CartItemEntity::toDTO)
-                        .collect(Collectors.toList()))
-
                 .build();
     }
 

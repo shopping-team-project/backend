@@ -3,6 +3,8 @@ package com.example.shopping.entity.cart;
 import com.example.shopping.domain.cart.CartDTO;
 import com.example.shopping.domain.cart.CartItemDTO;
 import com.example.shopping.entity.Base.BaseTimeEntity;
+import com.example.shopping.entity.item.ItemEntity;
+import com.example.shopping.entity.member.MemberEntity;
 import com.example.shopping.entity.order.OrderEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,48 +19,51 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class CartItemEntity extends BaseTimeEntity {
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="cart_id")
-    private CartEntity cart;
-
     @Id
     @GeneratedValue
     @Column(name="cartitem_id")
     private Long cartitemId;
 
-    @Column(name="item_name")
-    private String itemName;
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="cart_id")
+    private CartEntity cart;
 
-    @Column(name="item_price")
-    private String itemPrice;
+    @Column(name="cart_count")
+    private int count;
 
-    @Column(name="item_amount")
-    private Integer itemAmount;
-
-    @Column(name="item_status")
-    private String itemStatus;
-
-    @Column(name="item_place")
-    private String itemPlace;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private ItemEntity item;
 
     @Builder
-    public CartItemEntity(Long cartitemId, String itemName, String itemPrice, Integer itemAmount, String itemStatus, String itemPlace) {
+    public CartItemEntity(Long cartitemId, CartEntity cart, ItemEntity item, int count) {
         this.cartitemId = cartitemId;
-        this.itemName = itemName;
-        this.itemPrice = itemPrice;
-        this.itemAmount = itemAmount;
-        this.itemStatus = itemStatus;
-        this.itemPlace = itemPlace;
+        this.cart =cart;
+        this.item = item;
+        this.count = count;
     }
 
     public CartItemDTO toDTO(){
         return CartItemDTO.builder()
-                .cartitemId(this.cartitemId)
-                .itemAmount(this.itemAmount)
-                .itemName(this.itemName)
-                .itemPlace(this.itemPlace)
-                .itemPrice(this.itemPrice)
-                .itemStatus(this.itemStatus)
+                .itemId(this.item.getItemId())
+                .count(this.count)
                 .build();
     }
+
+    public static CartItemEntity setCartItem(CartEntity cart, ItemEntity item, int count){
+        return CartItemEntity.builder()
+                .cart(cart)
+                .item(item)
+                .count(count)
+                .build();
+    }
+
+    public void addCount(int count){
+        this.count += count;
+    }
+
+    public void updateCount(int count){
+        this.count = count;
+    }
+
 }

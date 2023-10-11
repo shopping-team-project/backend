@@ -192,4 +192,16 @@ public class MemberServiceImpl implements MemberService{
             return "이미 가입한 이메일이 있습니다.";
         }
     }
+
+    @Override
+    public String nickNameCheck(String nickName) {
+        MemberEntity findNickName = memberRepository.findByNickName(nickName);
+        if(findNickName == null) {
+            return "사용가능한 닉네임입니다.";
+        } else {
+            return "이미 존재하는 닉네임입니다.";
+        }
+    }
+
+
 }

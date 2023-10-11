@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
@@ -72,6 +73,7 @@ public class MemberController {
     @DeleteMapping("/{memberId}")
     @Tag(name = "member")
     @Operation(summary = "삭제 API", description = "유저를 삭제하는 API입니다.")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public String remove(@PathVariable Long memberId) {
         try {
             String remove = memberServiceImpl.removeUser(memberId);
@@ -100,6 +102,7 @@ public class MemberController {
     @PutMapping("")
     @Tag(name = "member")
     @Operation(summary = "수정 API", description = "유저 정보를 수정하는 API입니다.")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> update(@RequestBody ModifyDTO modifyDTO,
                                     @AuthenticationPrincipal UserDetails userDetails) {
         try {
@@ -113,7 +116,7 @@ public class MemberController {
     }
 
     // 중복체크
-    @PostMapping("/{memberEmail}")
+    @GetMapping("/{memberEmail}")
     @Tag(name = "member")
     @Operation(summary = "중복체크 API", description = "userEmail이 중복인지 체크하는 API입니다.")
     public String emailCheck(@PathVariable String memberEmail) {
@@ -137,5 +140,15 @@ public class MemberController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // 닉네임 조회
+    @GetMapping("/{nickName}")
+    @Tag(name = "member")
+    @Operation(summary = "닉네임 조회", description = "중복된 닉네임이 있는지 확인하는 API입니다.")
+    public String nickNameCheck(@PathVariable String nickName) {
+        log.info("nickName : " + nickName);
+        String result = memberServiceImpl.nickNameCheck(nickName);
+        return result;
     }
 }

@@ -19,18 +19,14 @@ public class CartDTO {
     @Schema(description = "장바구니번호")
     private Long cartId;
 
-    @Schema(description = "구매자아이디")
-    private Long memberId;
-
-    @Schema(description = "구매자닉네임")
-    private Long memberNick;
+    private MemberDTO member;
 
     private List<CartItemDTO> cartItem = new ArrayList<>();
 
     @Builder
-    public CartDTO(Long cartId, Long memberId, List<CartItemDTO> cartItem) {
+    public CartDTO(Long cartId, MemberDTO member, List<CartItemDTO> cartItem) {
         this.cartId = cartId;
-        this.memberId = memberId;
+        this.member = member;
         this.cartItem = cartItem;
     }
 
@@ -38,10 +34,14 @@ public class CartDTO {
         return CartEntity.builder()
                 .cartId(this.cartId)
                 .member(member)
-                .cartItem(this.cartItem.stream()
-                        .map(CartItemDTO::toEntity).collect(Collectors.toList()))
                 .build();
-
     }
 
+    public CartDTO createCart(MemberEntity member){
+
+        return CartDTO.builder()
+                .cartId(this.cartId)
+                .member(MemberDTO.toMemberDTO(member))
+                .build();
+    }
 }

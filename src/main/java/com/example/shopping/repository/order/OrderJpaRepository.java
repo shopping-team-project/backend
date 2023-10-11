@@ -8,7 +8,4 @@ import java.util.Optional;
 
 public interface OrderJpaRepository extends JpaRepository<OrderEntity, Long> {
 
-    Optional<OrderDTO> findByOrderAdmin(String admin);
-
-    Optional<OrderDTO> findByOrderMember(String mbrId);
 }

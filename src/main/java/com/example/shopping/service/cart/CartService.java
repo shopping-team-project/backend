@@ -10,16 +10,7 @@ import java.util.*;
 
 public interface CartService {
 
-    public ResponseEntity<?> addCart(CartDTO cart, ItemDTO item);
+    CartDTO addCart(CartDTO cart, ItemDTO item);
 
-    public ResponseEntity<?> deleteCart(long id, CartDTO cart);
-
-    public ResponseEntity<?> deleteAllCart(long id);
-
-    public ResponseEntity<?> updateCart(long id, CartItemDTO cartItem);
-
-    //TODO - 장바구니 주문하기 : itemstatus만 작업
-    public ResponseEntity<?> orderCart(long itemId);
-
-    public CartDTO getByMemberId(long mbrId);
+    CartDTO getByMemberId(long mbrId);
 }
