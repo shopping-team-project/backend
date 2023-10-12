@@ -2,6 +2,8 @@ package com.example.shopping.service.item;
 
 import com.example.shopping.domain.Item.ItemDTO;
 import com.example.shopping.domain.Item.ItemImgDTO;
+import com.example.shopping.domain.Item.ItemSellStatus;
+import com.example.shopping.domain.Item.ModifyItemDTO;
 import com.example.shopping.entity.item.ItemEntity;
 import com.example.shopping.entity.item.ItemImgEntity;
 import com.example.shopping.entity.member.MemberEntity;
@@ -45,7 +47,8 @@ public class ItemServiceImpl implements ItemService{
             ItemEntity item = ItemEntity.builder()
                     .itemName(itemDTO.getItemName())
                     .itemDetail(itemDTO.getItemDetail())
-                    .itemSellStatus(itemDTO.getItemSellStatus())
+                    // 처음 상품을 등록하면 무조건 SELL 상태
+                    .itemSellStatus(ItemSellStatus.SELL)
                     .stockNumber(itemDTO.getStockNumber())
                     .price(itemDTO.getPrice())
                     .itemPlace(itemDTO.getSellPlace())
@@ -72,7 +75,7 @@ public class ItemServiceImpl implements ItemService{
             item = ItemEntity.builder()
                     .itemName(itemDTO.getItemName())
                     .itemDetail(itemDTO.getItemDetail())
-                    .itemSellStatus(itemDTO.getItemSellStatus())
+                    .itemSellStatus(ItemSellStatus.SELL)
                     .stockNumber(itemDTO.getStockNumber())
                     .price(itemDTO.getPrice())
                     .itemPlace(itemDTO.getSellPlace())
@@ -107,7 +110,7 @@ public class ItemServiceImpl implements ItemService{
     // 상품 수정
     @Override
     public ResponseEntity<?> updateItem(Long itemId,
-                                        ItemDTO itemDTO,
+                                        ModifyItemDTO itemDTO,
                                         List<MultipartFile> itemFiles,
                                         String memberEmail) throws Exception {
         try {

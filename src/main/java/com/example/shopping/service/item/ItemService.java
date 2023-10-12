@@ -1,6 +1,7 @@
 package com.example.shopping.service.item;
 
 import com.example.shopping.domain.Item.ItemDTO;
+import com.example.shopping.domain.Item.ModifyItemDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public interface ItemService {
 
     // 상품 수정
     ResponseEntity<?> updateItem(Long itemId,
-                                 ItemDTO itemDTO,
+                                 ModifyItemDTO itemDTO,
                                  List<MultipartFile> itemFiles,
                                  String memberEmail) throws Exception;
 

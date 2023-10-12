@@ -1,6 +1,7 @@
 package com.example.shopping.controller.item;
 
 import com.example.shopping.domain.Item.ItemDTO;
+import com.example.shopping.domain.Item.ModifyItemDTO;
 import com.example.shopping.service.item.ItemServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -77,7 +78,7 @@ public class ItemController {
     @Tag(name = "item")
     @Operation(summary = "상품 수정", description = "상품을 수정하는 API입니다.")
     public ResponseEntity<?> updateItem(@PathVariable Long itemId,
-                                        @RequestBody ItemDTO itemDTO,
+                                        @RequestBody ModifyItemDTO itemDTO,
                                         @RequestPart(value = "files") List<MultipartFile> itemFiles,
                                         @AuthenticationPrincipal UserDetails userDetails) {
         try {
