@@ -56,7 +56,7 @@ public class ItemEntity extends BaseTimeEntity {
     // item 엔티티에 추가하면 연관관계에 있는 itemImg도 영향이 간다.
     // 보통 상품을 삭제하면 이미지도 같이 삭제되기 때문에 이렇게 했다.
     @Column(name = "item_img")
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("itemImgId asc")
     // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
     private List<ItemImgEntity> itemImgList = new ArrayList<>();

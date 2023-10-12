@@ -217,7 +217,7 @@ public class ItemServiceImpl implements ItemService{
                 // 상품 정보 삭제
                 itemRepository.deleteByItemId(itemId);
                 // DB에서 이미지 삭제
-                itemImgRepository.deleteById(img.getItemImgId());
+//                itemImgRepository.deleteById(img.getItemImgId());
                 // S3에서 삭제
                 String result = s3ItemImgUploaderService.deleteFile(uploadFilePath, uuidFileName);
                 log.info(result);

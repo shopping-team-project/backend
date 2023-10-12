@@ -31,12 +31,12 @@ public class BoardEntity extends BaseEntity {
     private MemberEntity member;
 
     // 게시판 이미지
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("boardImgId asc")
     private List<BoardImgEntity> boardImgDTOList = new ArrayList<>();
 
     // 댓글
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderBy("commentId asc ")
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
