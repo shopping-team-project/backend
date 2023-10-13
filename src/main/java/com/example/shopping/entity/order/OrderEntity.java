@@ -49,6 +49,7 @@ public class OrderEntity extends BaseTimeEntity {
     public OrderDTO toDTO(){
         return OrderDTO.builder()
                 .orderId(this.orderId)
+                .orderDate(this.orderDate)
                 .orderAdmin(this.orderAdmin)
                 .orderMember(this.orderMember)
                 .orderItem(this.orderItem.stream()
@@ -56,6 +57,7 @@ public class OrderEntity extends BaseTimeEntity {
                 .build();
     }
 
+    /*
     public static OrderEntity createOrder(Long orderAdmin, Long orderMember, List<OrderItemEntity> orderItemList) {
         return OrderEntity.builder()
                 .orderDate(LocalDateTime.now())
@@ -64,7 +66,7 @@ public class OrderEntity extends BaseTimeEntity {
                 .orderItem(orderItemList)
                 .build();
     }
-
+*/
     public void addOrderItem(OrderItemEntity orderItem) {
         this.orderItem.add(orderItem);
     }

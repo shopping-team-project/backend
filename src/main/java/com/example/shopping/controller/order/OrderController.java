@@ -14,42 +14,57 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.*;
 
 @Slf4j
 @RestController
+@RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
     @Autowired
     private final OrderService orderService;
 
-    @PostMapping(value = "/order")
+    @PostMapping(value = "/orderItem")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "상품주문", description = "상품을 주문하는 API입니다.")
-    public ResponseEntity<?> order(@RequestBody OrderMainDTO order, BindingResult result,
-                                   @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<?> order(@RequestBody OrderMainDTO order, BindingResult result
+                                     ,@AuthenticationPrincipal UserDetails userDetails
+    ) {
         OrderDTO orderItem;
 
         try {
-            if(result.hasErrors()) {
+            if (result.hasErrors()) {
                 log.error("bindingResult error : " + result.hasErrors());
                 return ResponseEntity.badRequest().body(result.getClass().getSimpleName());
             }
 
-            String email = userDetails.getUsername();
-            orderItem = orderService.orderItem(order, email);
+            //String email = userDetails.getUsername();
+            orderItem = orderService.orderItem(order, "admin123@test.com");
 
-        } catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         return ResponseEntity.ok().body(orderItem);
+    }
+
+
+    @GetMapping(value = "/{findEmail}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @Operation(summary = "주문내역조회", description = "주문내역을 조회하는 API입니다.")
+    public ResponseEntity<?> getOrders(@PathVariable String findEmail
+                                        ,@AuthenticationPrincipal UserDetails userDetails) {
+        List<OrderItemDTO> orders = new ArrayList<>();
+        try {
+            orders = orderService.getOrders(findEmail);
+
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok().body(orders);
     }
 
 }

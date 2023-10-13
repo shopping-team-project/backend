@@ -26,9 +26,7 @@ public class BoardImgEntity extends BaseEntity {
 
     // 여기에서 cascade = CascadeType.ALL 이거를 적용하면
     // BoardEntity의 변경사항이 연관된 엔티티에 모두 전파됩니다.
-    // 게시글을 수정하면 게시글 속 이미지들도 함께 수정되어야 하기 때문에
-    // 여기에 적용해야 합니다.
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private BoardEntity board;
 

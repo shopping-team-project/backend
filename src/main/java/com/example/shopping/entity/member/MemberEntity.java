@@ -63,4 +63,8 @@ public class MemberEntity extends BaseTimeEntity {
         this.address = address;
         this.memberPoint = memberPoint;
     }
+
+    public void addPoint(int point){
+        this.memberPoint += point;
+    }
 }

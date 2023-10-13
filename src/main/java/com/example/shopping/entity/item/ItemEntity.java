@@ -1,5 +1,6 @@
 package com.example.shopping.entity.item;
 
+import com.example.shopping.domain.Item.ItemDTO;
 import com.example.shopping.domain.Item.ItemSellStatus;
 import com.example.shopping.entity.Base.BaseTimeEntity;
 import com.example.shopping.entity.member.MemberEntity;
@@ -91,14 +92,34 @@ public class ItemEntity extends BaseTimeEntity {
     }
 
     public void itemSell(int cnt, ItemSellStatus status){
+        // 아이템 판매 시
+        // 재고감소, 상품상태변경, 예약자 및 예약수량 초기화
         this.stockNumber -= cnt;
 
         if(this.stockNumber == 0){
             this.itemSellStatus = status;
         }
+
+        this.itemReserver = null;
+        this.itemRamount = 0;
     }
 
     public void changeStatus(ItemSellStatus status){
         this.itemSellStatus = status;
+    }
+
+    public ItemDTO toItemInfoDTO(){
+        return ItemDTO.builder()
+                .itemReserver(this.itemReserver)
+                .itemName(this.itemName)
+                .itemDetail(this.itemDetail)
+                .itemId(this.itemId)
+                .itemSellStatus(this.itemSellStatus)
+                .regTime(this.getRegTime())
+                .sellPlace(this.itemPlace)
+                .price(this.getPrice())
+                .stockNumber(this.getStockNumber())
+                .itemRamount(this.getItemRamount())
+                .build();
     }
 }

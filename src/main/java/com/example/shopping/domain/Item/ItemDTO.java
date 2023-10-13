@@ -92,10 +92,13 @@ public class ItemDTO {
         List<ItemImgEntity> itemImgEntities = item.getItemImgList();
         List<ItemImgDTO> itemImgDTOList = new ArrayList<>();
 
-        for(ItemImgEntity itemImg : itemImgEntities) {
-            ItemImgDTO itemImgDTO = ItemImgDTO.toItemImgDTO(itemImg);
-            itemImgDTOList.add(itemImgDTO);
+        if(itemImgEntities != null){
+            for(ItemImgEntity itemImg : itemImgEntities) {
+                ItemImgDTO itemImgDTO = ItemImgDTO.toItemImgDTO(itemImg);
+                itemImgDTOList.add(itemImgDTO);
+            }
         }
+
         return ItemDTO.builder()
                 .itemId(item.getItemId())
                 .itemName(item.getItemName())
@@ -109,6 +112,20 @@ public class ItemDTO {
                 .itemReserver(item.getItemReserver())
                 .itemRamount(item.getItemRamount())
                 .itemImgList(itemImgDTOList)
+                .build();
+    }
+
+    public ItemEntity toEntity(){
+        return  ItemEntity.builder()
+                .itemId(this.itemId)
+                .itemDetail(this.itemDetail)
+                .itemName(this.itemName)
+                .itemPlace(this.sellPlace)
+                .itemRamount(this.itemRamount)
+                .itemReserver(this.itemReserver)
+                .itemSellStatus(this.itemSellStatus)
+                .price(this.price)
+                .stockNumber(this.stockNumber)
                 .build();
     }
 }
