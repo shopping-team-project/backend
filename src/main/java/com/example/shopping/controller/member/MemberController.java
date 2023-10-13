@@ -43,7 +43,7 @@ public class MemberController {
                                   BindingResult result) {
         try {
             // 입력값 검증 예외가 발생하면 예외 메시지를 응답한다.
-            if(result.hasErrors()) {
+            if (result.hasErrors()) {
                 log.info("BindingResult error : " + result.hasErrors());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getClass().getSimpleName());
             }
@@ -73,10 +73,13 @@ public class MemberController {
     @DeleteMapping("/{memberId}")
     @Tag(name = "member")
     @Operation(summary = "삭제 API", description = "유저를 삭제하는 API입니다.")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public String remove(@PathVariable Long memberId) {
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String remove(@PathVariable Long memberId,
+                         @AuthenticationPrincipal UserDetails userDetails) {
         try {
-            String remove = memberServiceImpl.removeUser(memberId);
+            String email = userDetails.getUsername();
+            log.info("email : " + email);
+            String remove = memberServiceImpl.removeUser(memberId, email);
             return remove;
         } catch (Exception e) {
             return "회원탈퇴 실패했습니다.";
@@ -84,7 +87,7 @@ public class MemberController {
     }
 
     // 로그인
-    @PostMapping("")
+    @PostMapping("/login")
     @Tag(name = "member")
     @Operation(summary = "로그인 API", description = "로그인을 하면 JWT를 반환해줍니다.")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
@@ -99,16 +102,17 @@ public class MemberController {
     }
 
     // 회원 수정
-    @PutMapping("")
+    @PutMapping("/{memberId}")
     @Tag(name = "member")
     @Operation(summary = "수정 API", description = "유저 정보를 수정하는 API입니다.")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> update(@RequestBody ModifyDTO modifyDTO,
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> update(@PathVariable Long memberId,
+                                    @RequestBody ModifyDTO modifyDTO,
                                     @AuthenticationPrincipal UserDetails userDetails) {
         try {
             String email = userDetails.getUsername();
             log.info("email : " + email);
-            ResponseEntity<?> responseEntity = memberServiceImpl.updateUser(modifyDTO, email);
+            ResponseEntity<?> responseEntity = memberServiceImpl.updateUser(memberId, modifyDTO, email);
             return ResponseEntity.ok().body(responseEntity);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("잘못된 요청");
@@ -131,7 +135,7 @@ public class MemberController {
     @Operation(summary = "access token 발급", description = "refresh token을 받으면 access token을 반환해줍니다.")
     public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String token) throws Exception {
         try {
-            if(token != null) {
+            if (token != null) {
                 ResponseEntity<TokenDTO> accessToken = tokenServiceImpl.createAccessToken(token);
                 return ResponseEntity.ok().body(accessToken);
             } else {

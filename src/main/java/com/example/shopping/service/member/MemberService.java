@@ -10,11 +10,11 @@ public interface MemberService {
     // 회원조회
     MemberDTO search(Long memberId);
     // 회원삭제
-    String removeUser(Long memberId);
+    String removeUser(Long memberId, String email);
     // 로그인
     ResponseEntity<?> login(String memberEmail, String memberPw);
     // 회원수정
-    ResponseEntity<?> updateUser(ModifyDTO modifyDTO, String memberEmail);
+    ResponseEntity<?> updateUser(Long memberId, ModifyDTO modifyDTO, String memberEmail);
     // 이메일 체크
     String emailCheck(String email);
     // 닉네임 체크

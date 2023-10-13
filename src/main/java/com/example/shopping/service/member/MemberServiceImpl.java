@@ -81,11 +81,12 @@ public class MemberServiceImpl implements MemberService{
 
     // 회원 삭제
     @Override
-    public String removeUser(Long memberId) {
-        MemberEntity member = memberRepository.findById(memberId)
-                .orElseThrow(EntityNotFoundException::new);
+    public String removeUser(Long memberId, String email) {
+        // 회원 조회
+        MemberEntity findUser = memberRepository.findByEmail(email);
 
-        if(member != null) {
+        // 회원이 비어있지 않고 넘어온 id가 DB에 등록된 id가 일치할 때
+        if(findUser != null && findUser.getMemberId().equals(memberId)) {
             memberRepository.deleteByMemberId(memberId);
             return "회원 탈퇴 완료";
         } else {
@@ -152,12 +153,13 @@ public class MemberServiceImpl implements MemberService{
 
     // 회원정보 수정
     @Override
-    public ResponseEntity<?> updateUser(ModifyDTO modifyDTO, String memberEmail) {
+    public ResponseEntity<?> updateUser(Long memberId, ModifyDTO modifyDTO, String memberEmail) {
         try {
+            // 회원조회
             MemberEntity findUser = memberRepository.findByEmail(memberEmail);
             log.info("user : " + findUser);
 
-            if(findUser != null) {
+            if(findUser != null && findUser.getMemberId().equals(memberId)) {
                 findUser = MemberEntity.builder()
                         .memberId(findUser.getMemberId())
                         .email(findUser.getEmail())
@@ -193,6 +195,7 @@ public class MemberServiceImpl implements MemberService{
         }
     }
 
+    // 닉네임 체크
     @Override
     public String nickNameCheck(String nickName) {
         MemberEntity findNickName = memberRepository.findByNickName(nickName);

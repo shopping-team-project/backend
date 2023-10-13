@@ -23,7 +23,7 @@ public class CommentController {
 
     // 댓글 작성
     @PostMapping("/{boardId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Tag(name = "comment")
     @Operation(summary = "댓글 등록", description = "댓글을 등록하는 API입니다.")
     public ResponseEntity<?> saveComment(@PathVariable Long boardId,
@@ -37,7 +37,7 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{boardId}/{commentId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Tag(name = "comment")
     @Operation(summary = "댓글 삭제", description = "댓글을 삭제하는 API입니다.")
     public String removeComment(@PathVariable Long boardId,
@@ -50,7 +50,7 @@ public class CommentController {
 
     // 댓글 수정
     @PutMapping("/{boardId}/{commentId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Tag(name = "comment")
     @Operation(summary = "댓글 수정", description = "댓글을 수정하는 API입니다.")
     public ResponseEntity<?> updateComment(@PathVariable Long boardId,
