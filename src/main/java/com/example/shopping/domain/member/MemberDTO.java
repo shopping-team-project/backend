@@ -1,14 +1,11 @@
 package com.example.shopping.domain.member;
 
 import com.example.shopping.entity.member.MemberEntity;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import net.minidev.json.annotate.JsonIgnore;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -87,9 +84,12 @@ public class MemberDTO {
                 .memberRole(member.getMemberRole())
                 .memberPoint(member.getMemberPoint())
                 .memberAddress(AddressDTO.builder()
-                        .memberAddr(member.getAddress().getMemberAddr())
-                        .memberAddrDetail(member.getAddress().getMemberAddrDetail())
-                        .memberAddrEtc(member.getAddress().getMemberAddrEtc())
+                        .memberAddr(member.getAddress().getMemberAddr() == null
+                                ? null : member.getAddress().getMemberAddr())
+                        .memberAddrDetail(member.getAddress().getMemberAddrDetail() == null
+                                ? null : member.getAddress().getMemberAddrDetail())
+                        .memberAddrEtc(member.getAddress().getMemberAddrEtc() == null
+                                ? null : member.getAddress().getMemberAddrEtc())
                         .build()).build();
     }
 }

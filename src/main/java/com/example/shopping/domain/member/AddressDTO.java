@@ -11,11 +11,11 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 public class AddressDTO {
-    @Schema(description = "우편번호", required = true)
+    @Schema(description = "우편번호")
     private String memberAddr;
-    @Schema(description = "주소", required = true)
+    @Schema(description = "주소")
     private String memberAddrDetail;
-    @Schema(description = "상세 주소", required = true)
+    @Schema(description = "상세 주소")
     private String memberAddrEtc;
 
     @Builder
